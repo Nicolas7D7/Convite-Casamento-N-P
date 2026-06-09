@@ -468,6 +468,7 @@ a {
 #gallery,
 #map-section,
 #manual,
+#presentes,
 #rsvp,
 footer {
   position: relative;
@@ -483,6 +484,7 @@ footer {
 #details,
 #map-section,
 #manual,
+#presentes,
 #rsvp {
   padding: var(--section-pad) 24px;
   text-align: center;
@@ -497,6 +499,7 @@ footer {
 #gallery::after,
 #map-section::after,
 #manual::after,
+#presentes::after,
 #rsvp::after,
 #intro::after {
   content: "";
@@ -511,7 +514,8 @@ footer {
 #details::before,
 #gallery::before,
 #map-section::before,
-#manual::before {
+#manual::before,
+#presentes::before {
   content: "";
   position: absolute;
   inset: calc(var(--frame-inset) + 12px);
@@ -525,6 +529,7 @@ footer {
 #gallery > *,
 #map-section > *,
 #manual > *,
+#presentes > *,
 #rsvp > *,
 footer > *,
 #intro > * {
@@ -593,7 +598,8 @@ footer > *,
 
 .details-inner,
 .map-inner,
-.manual-inner {
+.manual-inner,
+.presentes-inner {
   width: min(980px, 100%);
   margin: 0 auto;
 }
@@ -911,6 +917,98 @@ footer > *,
   font-size: clamp(19px, 2.2vw, 23px);
   font-weight: 300;
   line-height: 1.28;
+}
+
+/* ============================================================
+   PRESENTES
+   ============================================================ */
+#presentes {
+  background:
+    radial-gradient(circle at 50% 18%, rgba(212, 176, 106, 0.09), transparent 30%),
+    linear-gradient(180deg, rgba(7, 26, 61, 0.98), rgba(3, 11, 31, 0.98)),
+    var(--navy);
+}
+
+.presentes-card {
+  position: relative;
+  width: min(680px, 100%);
+  margin: 0 auto;
+  padding: clamp(34px, 6vw, 58px) clamp(22px, 5vw, 52px);
+  overflow: hidden;
+  border: 1px solid rgba(212, 176, 106, 0.38);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018)),
+    rgba(255, 255, 255, 0.025);
+  box-shadow: var(--shadow-card);
+}
+
+.presentes-card::before {
+  content: "";
+  position: absolute;
+  top: 18px;
+  left: 24px;
+  right: 24px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(232, 202, 142, 0.72), transparent);
+}
+
+.presentes-card::after {
+  content: "✦";
+  position: absolute;
+  right: clamp(18px, 4vw, 34px);
+  bottom: clamp(14px, 3vw, 28px);
+  color: rgba(212, 176, 106, 0.22);
+  font-family: var(--serif);
+  font-size: clamp(34px, 8vw, 72px);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.presentes-text {
+  max-width: 520px;
+  margin: -24px auto 30px;
+  color: var(--muted);
+  font-family: var(--serif);
+  font-size: clamp(18px, 3vw, 22px);
+  line-height: 1.68;
+}
+
+.presentes-cta {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 34px;
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  background: var(--gold);
+  color: var(--navy);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 3px;
+  line-height: 1.2;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background 0.28s ease, color 0.28s ease, transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.presentes-cta:hover,
+.presentes-cta:focus-visible {
+  background: var(--gold-light);
+  color: var(--navy-deep);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.2);
+}
+
+.presentes-note {
+  max-width: 420px;
+  margin: 18px auto 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
 }
 
 /* ============================================================
@@ -1279,6 +1377,7 @@ footer {
   #details,
   #map-section,
   #manual,
+  #presentes,
   #rsvp {
     padding-inline: 18px;
   }
@@ -1336,6 +1435,20 @@ footer {
 
   .manual-item p {
     font-size: 19px;
+  }
+
+  .presentes-card {
+    padding: 34px 20px;
+  }
+
+  .presentes-text {
+    margin-top: -20px;
+  }
+
+  .presentes-cta {
+    width: 100%;
+    padding: 0 18px;
+    letter-spacing: 2.4px;
   }
 
   .map-frame {
@@ -1435,6 +1548,7 @@ footer {
     <a href="#gallery"    class="nav-link">Galeria</a>
     <a href="#map-section" class="nav-link">Local</a>
     <a href="#manual"     class="nav-link">Manual</a>
+    <a href="#presentes"  class="nav-link">Presentes</a>
     <a href="#rsvp"       class="nav-link">RSVP</a>
   </div>
 </nav>
@@ -1658,6 +1772,32 @@ footer {
 </section>
 
 <!-- ============================================================
+     PRESENTES
+     ============================================================ -->
+<section id="presentes">
+  <div class="presentes-inner">
+    <div class="presentes-card reveal">
+      <p class="section-tag">Lista de Presentes</p>
+      <h2 class="section-title">Presentes</h2>
+      <p class="presentes-text">
+        Sua presença já é o nosso maior presente. Mas, se desejar nos presentear,
+        preparamos uma lista especial com sugestões escolhidas com carinho.
+      </p>
+      <a
+        href="https://convite-casamento-dois.vercel.app/"
+        class="presentes-cta"
+        id="presentesLink"
+      >
+        Ver lista de presentes
+      </a>
+      <p class="presentes-note">
+        Você será direcionado para uma página separada com as opções disponíveis.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
      RSVP
      ============================================================ -->
 <!--
@@ -1749,12 +1889,14 @@ footer {
   - revelações suaves
   - lightbox da galeria
   - navegação mobile
+  - link da lista de presentes
   - validação visual do RSVP
 */
 (() => {
   const root = document.documentElement;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const RSVP_ENDPOINT = 'https://script.google.com/macros/s/AKfycbx1RRoqSDiKANMd7bv98B58LL_T4686cxUNIS83bbENsZ5tzm0-UUOb1aOQq2_vmD8c/exec';
+  const PRESENTES_URL = 'https://SEU-LINK-DE-PRESENTES-AQUI.vercel.app';
+  const RSVP_ENDPOINT = 'COLE_AQUI_A_URL_DO_WEB_APP_DO_GOOGLE_APPS_SCRIPT';
   const RSVP_ORIGIN = 'Convite casamento';
 
   const setVH = () => {
@@ -1946,6 +2088,15 @@ footer {
       closeMobileNav();
     }
   });
+
+  const presentesLink = document.getElementById('presentesLink');
+
+  if (presentesLink) {
+    presentesLink.href = PRESENTES_URL;
+    // Para abrir em nova aba, descomente as duas linhas abaixo:
+    // presentesLink.target = '_blank';
+    // presentesLink.rel = 'noopener noreferrer';
+  }
 
   const rsvpForm = document.getElementById('rsvpForm');
   const rsvpSuccess = document.getElementById('rsvpSuccess');
