@@ -198,7 +198,12 @@ a {
 .nav-toggle:focus-visible,
 .map-cta:focus-visible,
 .rsvp-submit:focus-visible,
-.lightbox-close:focus-visible {
+.story-hotspot:focus-visible,
+.story-map-cta:focus-visible,
+.story-close:focus-visible,
+.story-button:focus-visible,
+.story-read-more:focus-visible,
+.presentes-option-cta:focus-visible {
   outline: 2px solid var(--gold-light);
   outline-offset: 3px;
 }
@@ -661,120 +666,498 @@ footer > *,
   line-height: 1.45;
 }
 
-.gallery-header {
-  padding: 0 24px 48px;
+.story-map-inner {
+  width: min(860px, calc(100% - 48px));
+  margin: 0 auto;
   text-align: center;
 }
 
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 5px;
-  width: min(940px, calc(100% - 48px));
+.story-map-header {
+  max-width: 650px;
+  margin: 0 auto 42px;
+}
+
+.story-map-header .section-title {
+  margin-bottom: 20px;
+}
+
+.story-map-intro {
+  max-width: 590px;
   margin: 0 auto;
+  color: var(--muted);
+  font-family: var(--serif);
+  font-size: clamp(17px, 2.5vw, 21px);
+  line-height: 1.65;
 }
 
-.gallery-item {
+.story-map-shell {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  aspect-ratio: 1;
+  width: min(768px, 100%);
+  margin: 0 auto;
+  border: 1px solid rgba(232, 202, 142, 0.52);
+  background: var(--navy-deep);
+  box-shadow: 0 28px 76px rgba(0, 0, 0, 0.38), 0 0 40px rgba(212, 176, 106, 0.08);
+}
+
+.story-map-shell::before,
+.story-map-shell::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.story-map-shell::before {
+  inset: 8px;
+  border: 1px solid rgba(232, 202, 142, 0.28);
+}
+
+.story-map-shell::after {
+  inset: 16px;
+  border: 1px solid rgba(212, 176, 106, 0.12);
+}
+
+.story-map-canvas {
+  position: relative;
+  aspect-ratio: 3 / 4;
   overflow: hidden;
-  border: 1px solid rgba(212, 176, 106, 0.26);
-  border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.035);
-  cursor: pointer;
-  transition: transform 0.45s var(--ease-out-expo), border-color 0.3s ease;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 50% 8%, rgba(22, 56, 118, 0.55), transparent 38%),
+    var(--navy-deep);
 }
 
-.gallery-item:hover {
-  border-color: rgba(232, 202, 142, 0.56);
-  transform: scale(0.985);
-}
-
-.gallery-item img {
+.story-map-image {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: grayscale(18%) brightness(0.88);
-  transition: transform 0.65s var(--ease-out-expo), filter 0.4s ease;
 }
 
-.gallery-item:hover img {
-  filter: grayscale(0%) brightness(1);
-  transform: scale(1.04);
+.story-paths {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 
-.gallery-placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  color: var(--muted);
+.story-path-base,
+.story-path-active {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
 }
 
-.gallery-placeholder span {
-  font-size: 22px;
-  opacity: 0.6;
+.story-path-base {
+  stroke: rgba(247, 236, 215, 0.28);
+  stroke-width: 2;
+  stroke-dasharray: 2 10;
 }
 
-.gallery-placeholder p {
-  color: var(--muted);
+.story-path-active {
+  stroke: var(--gold-light);
+  stroke-width: 3;
+  filter: drop-shadow(0 0 5px rgba(232, 202, 142, 0.72));
+  transition: stroke-dashoffset 0.9s var(--ease-out-expo);
+}
+
+.story-hotspots {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+}
+
+.story-hotspot {
+  position: absolute;
+  top: var(--y);
+  left: var(--x);
+  width: clamp(38px, 6vw, 52px);
+  height: clamp(38px, 6vw, 52px);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--cream);
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+}
+
+.story-hotspot::before,
+.story-hotspot::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: border-color 0.28s ease, box-shadow 0.28s ease, transform 0.28s ease, background 0.28s ease;
+}
+
+.story-hotspot::before {
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--gold-light);
+  background: rgba(7, 26, 61, 0.9);
+  box-shadow: 0 0 0 4px rgba(7, 26, 61, 0.68);
+}
+
+.story-hotspot::after {
+  width: 26px;
+  height: 26px;
+  border: 1px solid rgba(232, 202, 142, 0.52);
+}
+
+.story-hotspot:hover::before,
+.story-hotspot:focus-visible::before,
+.story-hotspot.is-current::before {
+  background: var(--gold-light);
+  box-shadow: 0 0 9px 4px rgba(232, 202, 142, 0.58);
+  transform: translate(-50%, -50%) scale(1.12);
+}
+
+.story-hotspot.is-visited::before {
+  background: var(--gold);
+}
+
+.story-hotspot.is-current::after {
+  border-color: var(--gold-light);
+  box-shadow: 0 0 14px rgba(232, 202, 142, 0.5);
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+.story-hotspot-label {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 3px);
+  width: max-content;
+  max-width: 170px;
+  padding: 6px 9px;
+  border: 1px solid var(--gold-line);
+  border-radius: 3px;
+  background: rgba(3, 11, 31, 0.94);
+  color: var(--cream);
   font-size: 9px;
+  letter-spacing: 1.2px;
+  line-height: 1.35;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+
+.story-hotspot:hover .story-hotspot-label,
+.story-hotspot:focus-visible .story-hotspot-label {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.story-map-cta,
+.story-button,
+.story-read-more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--gold-light);
+  cursor: pointer;
+  font-size: 10px;
   font-weight: 400;
-  letter-spacing: 2.5px;
-  opacity: 0.86;
+  letter-spacing: 2.6px;
+  line-height: 1.3;
+  text-transform: uppercase;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease, opacity 0.25s ease;
+}
+
+.story-map-cta {
+  margin-top: 34px;
+  padding: 0 30px;
+  background: var(--gold);
+  color: var(--navy-deep);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+}
+
+.story-map-cta:hover,
+.story-button:hover,
+.story-read-more:hover {
+  background: var(--gold-light);
+  color: var(--navy-deep);
+  transform: translateY(-2px);
+}
+
+.story-map-progress {
+  min-height: 20px;
+  margin-top: 15px;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 1.8px;
+  line-height: 1.5;
   text-transform: uppercase;
 }
 
-.lightbox {
+body.story-open {
+  overflow: hidden;
+}
+
+.story-modal[hidden] {
+  display: none;
+}
+
+.story-modal {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  display: flex;
+  display: grid;
   align-items: center;
-  justify-content: center;
-  padding: 28px;
-  background: rgba(3, 10, 25, 0.95);
+  justify-items: center;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: clamp(18px, 4vw, 44px);
+  background:
+    radial-gradient(circle at 20% 14%, rgba(22, 56, 118, 0.4), transparent 34%),
+    rgba(3, 10, 25, 0.97);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
 }
 
-.lightbox.active {
+.story-modal.is-open {
   opacity: 1;
   pointer-events: auto;
 }
 
-.lightbox img {
-  max-width: min(92vw, 1120px);
-  max-height: 90vh;
-  border-radius: var(--radius);
-  object-fit: contain;
+.story-dialog {
+  position: relative;
+  width: min(1120px, 100%);
+  min-height: min(720px, calc(100vh - 56px));
+  margin: auto;
+  border: 1px solid rgba(232, 202, 142, 0.46);
+  background:
+    linear-gradient(145deg, rgba(13, 39, 90, 0.96), rgba(3, 11, 31, 0.99) 64%),
+    var(--navy-deep);
+  box-shadow: 0 32px 90px rgba(0, 0, 0, 0.54);
 }
 
-.lightbox-close {
+.story-dialog::before {
+  content: "";
   position: absolute;
-  top: 22px;
-  right: 22px;
+  inset: 9px;
+  z-index: 0;
+  border: 1px solid rgba(212, 176, 106, 0.2);
+  pointer-events: none;
+}
+
+.story-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 5;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border: 1px solid var(--gold-line);
   border-radius: 50%;
-  background: rgba(7, 26, 61, 0.72);
+  background: rgba(3, 11, 31, 0.72);
   color: var(--gold-light);
   cursor: pointer;
+  font-size: 18px;
   transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.lightbox-close:hover {
+.story-close:hover {
   background: rgba(212, 176, 106, 0.16);
   transform: scale(0.96);
 }
+
+.story-panel {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  min-height: inherit;
+  touch-action: pan-y;
+}
+
+.story-visual,
+.story-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.story-visual {
+  align-items: center;
+  padding: clamp(58px, 7vw, 82px) clamp(30px, 5vw, 64px);
+  border-right: 1px solid rgba(212, 176, 106, 0.2);
+  background: rgba(1, 7, 20, 0.28);
+}
+
+.story-date {
+  margin-bottom: 18px;
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 3.2px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.story-photo-frame {
+  position: relative;
+  width: min(390px, 100%);
+  aspect-ratio: 4 / 5;
+  padding: 10px;
+  border: 2px solid var(--gold);
+  background: rgba(212, 176, 106, 0.08);
+  box-shadow: 0 22px 54px rgba(0, 0, 0, 0.34), inset 0 0 0 4px var(--navy-deep), inset 0 0 0 5px rgba(232, 202, 142, 0.5);
+}
+
+.story-photo-frame::before,
+.story-photo-frame::after {
+  content: "✦";
+  position: absolute;
+  z-index: 2;
+  color: var(--gold-light);
+  font-size: 13px;
+  line-height: 1;
+}
+
+.story-photo-frame::before {
+  top: -7px;
+  left: -7px;
+}
+
+.story-photo-frame::after {
+  right: -7px;
+  bottom: -7px;
+}
+
+.story-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: var(--navy-deep);
+}
+
+.story-panel.is-final .story-photo-frame {
+  box-shadow: 0 0 44px rgba(232, 202, 142, 0.22), inset 0 0 0 4px var(--navy-deep), inset 0 0 0 5px rgba(232, 202, 142, 0.56);
+  animation: storyFinalGlow 3.4s ease-in-out infinite;
+}
+
+.story-copy {
+  align-items: flex-start;
+  padding: clamp(66px, 8vw, 96px) clamp(34px, 6vw, 78px) clamp(46px, 6vw, 72px);
+}
+
+.story-indicator {
+  margin-bottom: 20px;
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.story-title {
+  margin-bottom: 20px;
+  color: var(--cream);
+  font-family: var(--serif);
+  font-size: clamp(38px, 5vw, 62px);
+  font-weight: 300;
+  line-height: 1.02;
+}
+
+.story-summary,
+.story-full {
+  color: var(--muted);
+  font-family: var(--serif);
+  font-size: clamp(18px, 2.2vw, 21px);
+  line-height: 1.72;
+}
+
+.story-full {
+  width: 100%;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(212, 176, 106, 0.22);
+  color: var(--cream);
+  white-space: pre-line;
+}
+
+.story-read-more {
+  min-height: 44px;
+  margin-top: 26px;
+  padding: 0 20px;
+  border-color: var(--gold-line);
+  letter-spacing: 2px;
+}
+
+.story-nav,
+.story-final-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: 100%;
+  margin-top: 34px;
+}
+
+.story-button {
+  min-width: 148px;
+  padding: 0 22px;
+}
+
+.story-button-primary {
+  background: var(--gold);
+  color: var(--navy-deep);
+}
+
+.story-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.story-final-actions {
+  display: none;
+}
+
+.story-panel.is-final .story-nav,
+.story-panel.is-final .story-read-more {
+  display: none;
+}
+
+.story-panel.is-final .story-final-actions {
+  display: flex;
+}
+
+.story-panel.is-entering .story-photo-frame {
+  animation: storyPhotoIn 0.72s var(--ease-out-expo) both;
+}
+
+.story-panel.is-final.is-entering .story-photo-frame {
+  animation:
+    storyPhotoIn 0.72s var(--ease-out-expo) both,
+    storyFinalGlow 3.4s 0.72s ease-in-out infinite;
+}
+
+.story-panel.is-entering .story-copy > * {
+  animation: storyCopyIn 0.65s var(--ease-out-expo) both;
+}
+
+.story-panel.is-entering .story-copy > *:nth-child(2) { animation-delay: 0.06s; }
+.story-panel.is-entering .story-copy > *:nth-child(3) { animation-delay: 0.11s; }
+.story-panel.is-entering .story-copy > *:nth-child(n+4) { animation-delay: 0.16s; }
 
 .map-frame {
   width: min(780px, 100%);
@@ -931,7 +1314,7 @@ footer > *,
 
 .presentes-card {
   position: relative;
-  width: min(680px, 100%);
+  width: min(980px, 100%);
   margin: 0 auto;
   padding: clamp(34px, 6vw, 58px) clamp(22px, 5vw, 52px);
   overflow: hidden;
@@ -966,12 +1349,116 @@ footer > *,
 }
 
 .presentes-text {
-  max-width: 520px;
-  margin: -24px auto 30px;
+  max-width: 680px;
+  margin: -24px auto 0;
   color: var(--muted);
   font-family: var(--serif);
   font-size: clamp(18px, 3vw, 22px);
   line-height: 1.68;
+}
+
+.presentes-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(18px, 3vw, 26px);
+  margin-top: clamp(32px, 5vw, 44px);
+}
+
+.presentes-option {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--gold-line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent 42%),
+    var(--navy);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.2);
+  text-align: left;
+  transition: border-color 0.28s ease, box-shadow 0.28s ease, transform 0.28s ease;
+}
+
+.presentes-option:hover {
+  border-color: rgba(232, 202, 142, 0.66);
+  box-shadow: 0 20px 42px rgba(0, 0, 0, 0.28);
+  transform: translateY(-4px);
+}
+
+.presentes-option-logos {
+  display: grid;
+  align-items: center;
+  gap: 9px;
+  min-height: 104px;
+  padding: 20px;
+  border-bottom: 1px solid rgba(212, 176, 106, 0.2);
+  background: rgba(3, 11, 31, 0.48);
+}
+
+.presentes-option-logos-multiple {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.presentes-option-logo-single {
+  justify-items: center;
+}
+
+.presentes-logo-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 58px;
+  min-width: 0;
+  padding: 8px;
+  border-radius: calc(var(--radius) - 1px);
+  background: var(--white);
+}
+
+.presentes-option-logo-single .presentes-logo-tile {
+  width: min(210px, 76%);
+  height: 72px;
+  padding: 10px 18px;
+}
+
+.presentes-logo-tile img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.presentes-option-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  padding: 26px clamp(20px, 3vw, 28px) 28px;
+}
+
+.presentes-option-tag {
+  margin-bottom: 10px;
+  color: var(--gold);
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 2.4px;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.presentes-option-title {
+  color: var(--cream);
+  font-family: var(--serif);
+  font-size: clamp(28px, 3.6vw, 34px);
+  font-weight: 400;
+  line-height: 1.08;
+}
+
+.presentes-option-description {
+  margin: 14px 0 24px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
 }
 
 .presentes-cta {
@@ -995,6 +1482,13 @@ footer > *,
   transition: background 0.28s ease, color 0.28s ease, transform 0.28s ease, box-shadow 0.28s ease;
 }
 
+.presentes-option-cta {
+  width: 100%;
+  margin-top: auto;
+  padding-inline: 22px;
+  text-align: center;
+}
+
 .presentes-cta:hover,
 .presentes-cta:focus-visible {
   background: var(--gold-light);
@@ -1003,9 +1497,25 @@ footer > *,
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.2);
 }
 
+.presentes-option-cta[aria-disabled="true"] {
+  border-color: rgba(212, 176, 106, 0.42);
+  background: rgba(212, 176, 106, 0.16);
+  color: var(--muted);
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+.presentes-option-cta[aria-disabled="true"]:hover,
+.presentes-option-cta[aria-disabled="true"]:focus-visible {
+  background: rgba(212, 176, 106, 0.16);
+  color: var(--muted);
+  box-shadow: none;
+  transform: none;
+}
+
 .presentes-note {
-  max-width: 420px;
-  margin: 18px auto 0;
+  max-width: 720px;
+  margin: 26px auto 0;
   color: var(--muted);
   font-size: 12px;
   line-height: 1.6;
@@ -1196,9 +1706,35 @@ footer {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .story-dialog {
+    width: min(680px, 100%);
+  }
+
+  .story-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .story-visual {
+    padding-bottom: 46px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(212, 176, 106, 0.2);
+  }
+
+  .story-photo-frame {
+    width: min(360px, 82vw);
+  }
+
+  .story-copy {
+    padding-top: 48px;
+  }
+
   .nav-inner {
     gap: 18px;
     padding-inline: 22px;
+  }
+
+  .presentes-option-logos {
+    padding-inline: 16px;
   }
 }
 
@@ -1206,6 +1742,14 @@ footer {
   :root {
     --section-pad: 78px;
     --frame-inset: 12px;
+  }
+
+  .presentes-options {
+    grid-template-columns: 1fr;
+  }
+
+  .presentes-option {
+    width: 100%;
   }
 
   #nav {
@@ -1339,7 +1883,6 @@ footer {
 
   .countdown-grid,
   .details-grid,
-  .gallery-grid,
   .form-row,
   .manual-grid {
     grid-template-columns: 1fr;
@@ -1358,8 +1901,36 @@ footer {
     width: min(440px, 100%);
   }
 
-  .gallery-grid {
-    width: min(430px, calc(100% - 40px));
+  .story-map-inner {
+    width: min(100% - 36px, 768px);
+  }
+
+  .story-hotspot-label {
+    display: none;
+  }
+
+  .story-modal {
+    align-items: start;
+    padding: 10px;
+  }
+
+  .story-dialog {
+    min-height: calc(100vh - 20px);
+  }
+
+  .story-close {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(3, 11, 31, 0.92);
+  }
+
+  .story-visual {
+    padding: 62px 24px 38px;
+  }
+
+  .story-copy {
+    padding: 42px 26px 38px;
   }
 
   .manual-note {
@@ -1384,6 +1955,48 @@ footer {
 
   #gallery {
     padding-block: 72px;
+  }
+
+  .story-map-header {
+    margin-bottom: 30px;
+  }
+
+  .story-map-shell::before {
+    inset: 5px;
+  }
+
+  .story-map-shell::after {
+    inset: 10px;
+  }
+
+  .story-map-cta {
+    width: 100%;
+    max-width: 360px;
+    padding-inline: 18px;
+  }
+
+  .story-photo-frame {
+    width: min(320px, 80vw);
+  }
+
+  .story-title {
+    font-size: clamp(36px, 12vw, 48px);
+  }
+
+  .story-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .story-panel.is-final .story-final-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .story-button {
+    width: 100%;
+    min-width: 0;
+    padding-inline: 14px;
   }
 
   .section-title {
@@ -1445,6 +2058,24 @@ footer {
     margin-top: -20px;
   }
 
+  .presentes-option-logos-multiple {
+    gap: 7px;
+    padding-inline: 12px;
+  }
+
+  .presentes-logo-tile {
+    height: 52px;
+    padding: 7px;
+  }
+
+  .presentes-option-logo-single .presentes-logo-tile {
+    height: 66px;
+  }
+
+  .presentes-option-content {
+    padding: 24px 18px 26px;
+  }
+
   .presentes-cta {
     width: 100%;
     padding: 0 18px;
@@ -1489,6 +2120,40 @@ footer {
   50% {
     opacity: 1;
     transform: scaleY(1.12) translateY(5px);
+  }
+}
+
+@keyframes storyPhotoIn {
+  from {
+    opacity: 0;
+    transform: translateY(22px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes storyCopyIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes storyFinalGlow {
+  0%, 100% {
+    box-shadow: 0 0 30px rgba(232, 202, 142, 0.16), inset 0 0 0 4px var(--navy-deep), inset 0 0 0 5px rgba(232, 202, 142, 0.5);
+  }
+
+  50% {
+    box-shadow: 0 0 56px rgba(232, 202, 142, 0.34), inset 0 0 0 4px var(--navy-deep), inset 0 0 0 5px rgba(232, 202, 142, 0.7);
   }
 }
 
@@ -1545,7 +2210,7 @@ footer {
   <div class="nav-inner" id="navMenu">
     <a href="#intro"      class="nav-link">Início</a>
     <a href="#countdown"  class="nav-link">Contagem</a>
-    <a href="#gallery"    class="nav-link">Galeria</a>
+    <a href="#gallery"    class="nav-link">Nossa História</a>
     <a href="#map-section" class="nav-link">Local</a>
     <a href="#manual"     class="nav-link">Manual</a>
     <a href="#presentes"  class="nav-link">Presentes</a>
@@ -1660,44 +2325,122 @@ footer {
 </section>
  
 <!-- ============================================================
-     GALERIA
+     NOSSA HISTÓRIA
      ============================================================ -->
-<!-- Seção de fotos do casal. -->
-<section id="gallery">
-  <div class="gallery-header">
-    <div class="reveal">
+<!--
+  Mapa interativo da história do casal.
+  A arte base e as fotografias devem ficar na pasta /historia/.
+-->
+<section id="gallery" aria-labelledby="story-map-title">
+  <div class="story-map-inner">
+    <header class="story-map-header reveal">
       <p class="section-tag">Memórias</p>
-      <h2 class="section-title">Nossa <em>História</em></h2>
+      <h2 class="section-title" id="story-map-title">Nossa <em>História</em></h2>
+      <p class="story-map-intro">
+        Cada quadro guarda um capítulo do caminho que nos trouxe até aqui.
+        Toque em um momento ou percorra a história desde o começo.
+      </p>
+    </header>
+
+    <div class="story-map-shell reveal reveal-delay-1">
+      <div class="story-map-canvas" id="storyMapCanvas">
+        <img
+          class="story-map-image"
+          src="/historia/mapa-geral.png"
+          width="768"
+          height="1024"
+          loading="lazy"
+          alt="Linha do tempo de Nicolas e Phamyla, formada por dez quadros dourados conectados por um caminho"
+        >
+
+        <svg class="story-paths" viewBox="0 0 768 1024" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <path
+  class="story-path-base"
+  d="
+    M96 136
+    C180 142 280 150 362 165
+    C470 180 560 170 641 166
+    C630 260 420 310 96 395
+    C92 500 100 600 110 685
+    C180 740 280 810 380 842
+    C475 872 560 885 638 884
+    C650 820 650 750 640 667
+    C640 575 642 485 642 402
+    C575 420 500 450 385 486
+  "
+></path>
+
+<path
+  class="story-path-active"
+  id="storyPathActive"
+  d="
+    M96 136
+    C180 142 280 150 362 165
+    C470 180 560 170 641 166
+    C630 260 420 310 96 395
+    C92 500 100 600 110 685
+    C180 740 280 810 380 842
+    C475 872 560 885 638 884
+    C650 820 650 750 640 667
+    C640 575 642 485 642 402
+    C575 420 500 450 385 486
+  "
+></path>
+        </svg>
+
+        <!-- Os botões acessíveis de cada capítulo são criados a partir de STORY_STEPS. -->
+        <div class="story-hotspots" id="storyHotspots"></div>
+      </div>
     </div>
-  </div>
-  <div class="gallery-grid">
-    <!-- Substitua os placeholders pelas suas fotos -->
-    <!-- Exemplo: <img src="foto1.jpg" alt="Descrição"> -->
-    <div class="gallery-item reveal">
-      <div class="gallery-placeholder"><span>📷</span><p>Foto 1</p></div>
-    </div>
-    <div class="gallery-item reveal reveal-delay-1">
-      <div class="gallery-placeholder"><span>📷</span><p>Foto 2</p></div>
-    </div>
-    <div class="gallery-item reveal reveal-delay-2">
-      <div class="gallery-placeholder"><span>📷</span><p>Foto 3</p></div>
-    </div>
-    <div class="gallery-item reveal reveal-delay-1">
-      <div class="gallery-placeholder"><span>📷</span><p>Foto 4</p></div>
-    </div>
-    <div class="gallery-item reveal reveal-delay-2">
-      <div class="gallery-placeholder"><span>📷</span><p>Foto 5</p></div>
-    </div>
-    <div class="gallery-item reveal reveal-delay-3">
-      <div class="gallery-placeholder"><span>📷</span><p>Foto 6</p></div>
-    </div>
+
+    <button class="story-map-cta reveal reveal-delay-2" id="storyStart" type="button">
+      Percorrer nossa história
+    </button>
+    <p class="story-map-progress" id="storyMapProgress" aria-live="polite"></p>
   </div>
 </section>
- 
-<!-- Estrutura que mostra a foto ampliada quando alguma imagem é clicada. -->
-<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Foto ampliada">
-  <button class="lightbox-close" id="lightboxClose" aria-label="Fechar">✕</button>
-  <img src="" alt="" id="lightboxImg">
+
+<!-- Experiência imersiva, aberta pelo mapa ou pelo botão principal. -->
+<div class="story-modal" id="storyModal" role="dialog" aria-modal="true" aria-labelledby="storyTitle" hidden>
+  <div class="story-dialog">
+    <button class="story-close" id="storyClose" type="button" aria-label="Fechar e voltar ao mapa">✕</button>
+
+    <article class="story-panel" id="storyPanel">
+      <div class="story-visual">
+        <p class="story-date" id="storyDate"></p>
+        <div class="story-photo-frame">
+          <img class="story-photo" id="storyImage" src="" alt="">
+        </div>
+      </div>
+
+      <div class="story-copy">
+        <p class="story-indicator" id="storyIndicator" aria-live="polite"></p>
+        <h2 class="story-title" id="storyTitle"></h2>
+        <p class="story-summary" id="storySummary"></p>
+
+        <button
+          class="story-read-more"
+          id="storyReadMore"
+          type="button"
+          aria-expanded="false"
+          aria-controls="storyFullText"
+        >
+          Ler história completa
+        </button>
+        <div class="story-full" id="storyFullText" hidden></div>
+
+        <nav class="story-nav" aria-label="Navegação entre capítulos">
+          <button class="story-button" id="storyPrevious" type="button">Anterior</button>
+          <button class="story-button story-button-primary" id="storyNext" type="button">Próximo</button>
+        </nav>
+
+        <div class="story-final-actions">
+          <button class="story-button" id="storyReturn" type="button">Voltar ao convite</button>
+          <button class="story-button story-button-primary" id="storyReplay" type="button">Rever nossa história</button>
+        </div>
+      </div>
+    </article>
+  </div>
 </div>
  
 <!-- ============================================================
@@ -1785,15 +2528,69 @@ footer {
         Sua presença já é o nosso maior presente. Mas, se desejar nos presentear,
         preparamos uma lista especial com sugestões escolhidas com carinho.
       </p>
-      <a
-        href="https://convite-casamento-dois.vercel.app/"
-        class="presentes-cta"
-        id="presentesLink"
-      >
-        Ver lista de presentes
-      </a>
+
+      <div class="presentes-options">
+        <article class="presentes-option">
+          <div
+            class="presentes-option-logos presentes-option-logos-multiple"
+            aria-label="Lojas disponíveis na lista personalizada"
+          >
+            <span class="presentes-logo-tile">
+              <img src="/imagens/lojas/amazon.png" alt="Amazon" loading="lazy">
+            </span>
+            <span class="presentes-logo-tile">
+              <img src="/imagens/lojas/mercado-livre.png" alt="Mercado Livre" loading="lazy">
+            </span>
+            <span class="presentes-logo-tile">
+              <img src="/imagens/lojas/magalu.png" alt="Magalu" loading="lazy">
+            </span>
+            <span class="presentes-logo-tile">
+              <img src="/imagens/lojas/shopee.png" alt="Shopee" loading="lazy">
+            </span>
+          </div>
+          <div class="presentes-option-content">
+            <p class="presentes-option-tag">Diversas lojas online</p>
+            <h3 class="presentes-option-title">Lista Personalizada</h3>
+            <p class="presentes-option-description">
+              Veja nossas sugestões e escolha presentes disponíveis em diferentes lojas online.
+            </p>
+            <a
+              href="https://convite-casamento-dois.vercel.app/"
+              class="presentes-cta presentes-option-cta"
+              id="presentesLink"
+            >
+              Abrir lista personalizada
+            </a>
+          </div>
+        </article>
+
+        <article class="presentes-option">
+          <div class="presentes-option-logos presentes-option-logo-single">
+            <span class="presentes-logo-tile">
+              <img src="/imagens/lojas/havan.png" alt="Havan" loading="lazy">
+            </span>
+          </div>
+          <div class="presentes-option-content">
+            <p class="presentes-option-tag">Lista oficial Havan</p>
+            <h3 class="presentes-option-title">Lista Havan</h3>
+            <p class="presentes-option-description">
+              Escolha um presente diretamente na nossa lista oficial de casamento da Havan.
+            </p>
+            <a
+              href="#"
+              class="presentes-cta presentes-option-cta"
+              id="presentesHavanLink"
+              aria-disabled="true"
+              tabindex="0"
+            >
+              Lista Havan em breve
+            </a>
+          </div>
+        </article>
+      </div>
+
       <p class="presentes-note">
-        Você será direcionado para uma página separada com as opções disponíveis.
+        Escolha a opção que for mais confortável para você. Todo presente fará parte da construção do nosso novo lar.
       </p>
     </div>
   </div>
@@ -1889,7 +2686,7 @@ footer {
   - envelope guiado pelo scroll
   - contagem regressiva
   - revelações suaves
-  - lightbox da galeria
+  - mapa e capítulos de Nossa História
   - navegação mobile
   - link da lista de presentes
   - validação visual do RSVP
@@ -1898,9 +2695,360 @@ footer {
   const root = document.documentElement;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const PRESENTES_URL = 'https://convite-casamento-dois.vercel.app/';
+  const HAVAN_PRESENTES_URL = 'COLE_AQUI_O_LINK_PUBLICO_DA_LISTA_HAVAN';
   const RSVP_ENDPOINT = 'https://script.google.com/macros/s/AKfycbx1RRoqSDiKANMd7bv98B58LL_T4686cxUNIS83bbENsZ5tzm0-UUOb1aOQq2_vmD8c/exec';
   const RSVP_ORIGIN = 'https://teste-casamento-nine.vercel.app/';
 
+  /*
+    CONTEÚDO DE NOSSA HISTÓRIA
+    Substitua os textos marcados entre colchetes pelo resumo e pela história real
+    de cada capítulo. Mantenha os campos id, date, title, image, summary e fullText.
+  */
+  const STORY_STEPS = [
+    {
+      id: 'primeiro-encontro',
+      date: '08/11/2025',
+      title: 'Primeiro encontro',
+      image: '/historia/01-primeiro-encontro.png',
+      summary: 'O primeiro capítulo da história que escolhemos construir juntos.',
+      fullText: `Aqui, diante desta bela vista, foi onde eles se encontraram pela primeira vez. Menos de uma semana depois de se conhecerem — e apenas três dias após o primeiro contato —, ele a chamou para sair e, para sua surpresa, ela aceitou.
+
+Ele se lembra de ter ficado muito nervoso. Nunca havia planejado tanto um encontro. Pediu sugestões de lugares a todas as pessoas que conhecia, pois queria levá-la a algum lugar especial. Finalmente, encontrou aquele restaurante bem em frente à ponte: um lugar popular e com uma ótima vista.
+
+Assim que chegaram, ele percebeu a multidão, o som alto e toda a agitação do ambiente — coisas completamente contrárias aos seus gostos. Mas, naquele momento, sua intenção era causar uma boa primeira impressão. Por ser um lugar bastante popular, imaginou que ela gostaria.
+
+Logo que se sentaram, ele percebeu a inquietação dela. Pensou que pudesse ser por causa do clima, já que era um dia frio e o vento estava forte. Então, ofereceu-lhe seu casaco e, para sua surpresa, ela aceitou.
+
+Eles pediram a comida e, enquanto esperavam, ele reparou nos pés dela. Ela contou que estavam muito frios e que até havia levado meias, mas não queria colocá-las porque ficaria envergonhada de usar meias com suas sapatilhas pretas. Ele nem permitiu que ela recusasse novamente. Insistiu para que calçasse as meias, dizendo que não havia motivo para sentir vergonha por aquilo.
+
+Antes de a comida chegar, ela perguntou se poderiam caminhar pela ponte depois. Ele respondeu: “Lógico”, e então perguntou: “Você não gosta de lugares assim?”. Quando ela disse que não, ele abriu um sorriso sincero.
+
+Eles chegaram, fizeram o pedido, comeram e saíram em um tempo recorde de quarenta minutos. Era um lugar movimentado e caro, mas, sinceramente, aquele foi o melhor dinheiro que ele já havia gastado. Pagou com o maior prazer. Valeu cada centavo descobrir que ela detestava lugares daquele tipo tanto quanto ele e que preferia simplesmente caminhar e conversar ao seu lado.
+
+Com o passar do tempo, a noite foi ficando mais tarde e a chuva começou a cair. Eles estavam a caminho do carro quando ela sugeriu que fossem para outro lugar. Já haviam passado algum tempo conversando e, diante de uma oportunidade que muitos usariam para encerrar a noite, ela demonstrou que queria permanecer mais um pouco, simplesmente conversando com ele.
+
+Foi naquele momento que ele percebeu, pela primeira vez, que ela era especial.
+
+E assim, os dois encontraram outro lugar onde poderiam se esconder da chuva e continuaram conversando por mais algumas horas.`
+    },
+    {
+      id: 'segundo-encontro',
+      date: '15/11/2025',
+      title: 'Segundo encontro',
+      image: '/historia/02-segundo-encontro.png',
+      summary: 'Mais um encontro, mais uma lembrança guardada com carinho.',
+      fullText: `Aquele lugar sempre lhe transmitiu uma sensação diferente quando passava por perto. Durante algum tempo, ele acreditou que isso acontecia porque o local reunia muitas das coisas de que gostava. Hoje, porém, o que mais ama ali é saber que foi naquele lugar que se apaixonou completamente por ela.
+
+Depois do primeiro encontro, ele entendeu que ela gostava de coisas simples, mas que tivessem qualidade. Naquele dia, ela até preparou um guacamole para que ele experimentasse.
+
+Depois de provar aquela iguaria gastronômica, ela lhe ofereceu uma Coca-Cola. Aquela foi a primeira vez, em anos, que ele tomou um gole. Sempre recusava. Nem se lembrava de quantas vezes já havia dito “não, obrigado”, mas, vindo dela, ele simplesmente não conseguiu negar.
+
+Ele aceitou a bebida e somente depois contou que não costumava tomar refrigerante. Ela ficou extremamente sem graça, mas ele bebeu até o último gole.
+
+Eles passearam, e ela lhe mostrou um lugar que ele nem sabia que existia ali. Caminharam bastante, e ele conheceu muitos lugares de que gostou. Contudo, a cada passo, percebia cada vez mais que o lugar de que realmente gostava era aquele em que estivesse perto dela.
+
+Eles andaram e andaram, conversaram e conversaram e, finalmente, aconteceu o primeiro beijo.
+
+Ele não poderia dizer que viu estrelinhas ou que sentiu borboletas no estômago por causa daquele beijo, porque já sentia tudo isso muito antes de precisar beijá-la.
+
+Em determinado momento, eles se sentaram em um banco e conversaram sobre coisas tão bobas. Jogaram pedra, papel ou tesoura, ela lhe mostrou músicas do Luan Santana e fizeram coisas tão simples que, ao lado dela, pareciam as mais divertidas do mundo.
+
+Mais uma vez, a noite chegou, mas a vontade de continuar ali permanecia inabalável.
+
+Durante toda a sua vida, até aquele dia, ele sempre saía de casa pensando: “Até tal hora, já quero estar em casa”. Ao lado dela, porém, esse pensamento sequer passou por sua cabeça.
+
+Ele olhava para o relógio com raiva e tinha vontade de gritar:
+
+“PARA DE AVANÇAR, RELÓGIO DESGRAÇADO!”
+
+Foi um dia incrível, do qual ele jamais se esqueceria.
+
+O dia em que se apaixonou por ela.`
+    },
+    {
+      id: 'terceiro-encontro',
+      date: '22/11/2025',
+      title: 'Terceiro encontro',
+      image: '/historia/03-terceiro-encontro.png',
+      summary: 'Um novo capítulo para aquilo que começava a florescer.',
+      fullText: `Era apenas a terceira vez que eles se encontravam, e já estavam conhecendo as famílias um do outro.
+
+No sábado, foi a vez de ela conhecer a família dele. Fez uma palhaçada em seu rosto e se divertiu com aquilo. Apesar do nervosismo, foi um dia muito bom. Todos gostaram dela — e, para ele, não poderia ser diferente. Disseram que ela parecia uma Barbie de tão linda, e ele não poderia concordar mais.
+
+No domingo, foi a vez de ele conhecer a família dela. Assim que chegou, percebeu que a mãe dela ainda não estava, e isso o deixou apreensivo. Pelo que sabia, ela tinha várias perguntas para fazer: um verdadeiro interrogatório profissional.
+
+Ainda assim, ele não sentia medo. Sabia que, independentemente da pergunta, teria uma resposta. Não apenas porque já a amava, mas porque estava disposto a fazer tudo por ela.
+
+Ao final daquele dia, já não conseguia mais conter o que sentia. A vontade de gritar “EU TE AMO! EU TE AMO COMO NUNCA JAMAIS AMEI NINGUÉM!” era tão grande que parecia já não caber dentro dele.
+
+Finalmente, a mãe dela chegou, mas o tão esperado interrogatório não aconteceu.
+
+No dia seguinte, ele perguntou sobre isso, e ela respondeu:
+
+“Ela disse que não sentiu necessidade. Viu que você era um bom rapaz e que, além de me amar, cuidaria de mim.”
+
+Ela não poderia estar mais certa.`
+    },
+    {
+      id: 'pedido-de-namoro',
+      date: '29/11/2025',
+      title: 'Pedido de namoro',
+      image: '/historia/04-pedido-namoro.png',
+      summary: 'O dia em que a nossa história ganhou um nome e uma promessa.',
+      fullText: `Logo depois do terceiro encontro, ele já não suportava a ideia de ela ainda não ser sua namorada. É claro que os dois já estavam juntos, mas aquilo ainda não havia sido dito, e ele não conseguia aceitar essa indefinição. Não queria perder tempo.
+
+Eles haviam se conhecido no dia 2 de novembro de 2025 e, antes mesmo de completarem um mês juntos, ele já queria fazer o pedido.
+
+Em nenhum momento pensou: “É cedo demais”.
+
+Muito pelo contrário.
+
+Tudo o que passava por sua cabeça era: “Eu já perdi muito tempo. Já demorei demais”.
+
+Ele tinha certeza. Certeza de que era ela. Amou-a desde o início e se apaixonou logo no segundo encontro. Aquele seria apenas o quarto encontro, mas ele já a pediria em namoro.
+
+Passou a semana inteira ansioso para que o sábado finalmente chegasse. Antes de encontrá-la, foi comprar as alianças.
+
+Coincidentemente, no sábado anterior, ela havia esquecido um de seus anéis na casa dele e, de maneira muito discreta, comentou por acaso:
+
+“Sabe, é que meus dedos são pequenos. Meu número é 11.”
+
+Puro acaso, segundo ela.
+
+Ele foi buscá-la em casa, os dois almoçaram e, depois, ele disse que queria levá-la a um lugar.
+
+Quando finalmente chegaram, ele contou o quanto aquele local representava um de seus maiores sonhos: construir uma casa ali, em um terreno enorme, repleto de possibilidades.
+
+E foi justamente diante daquele sonho que ele fez o pedido.
+
+Não havia buquê, pétalas ou rosas. Ele simplesmente a levou até um dos lugares que mais representavam seus planos para o futuro, porque queria dividi-los com ela. Queria incluí-la em seus sonhos.
+
+Durante todo o tempo, dizia:
+
+“Nós podemos construir ali, fazer isso e aquilo...”
+
+Porque, naquele momento, ela já fazia parte de tudo o que ele sonhava viver.
+
+No dia 29 de novembro de 2025, ela lhe disse “sim” pela primeira vez.`
+    },
+    {
+      id: 'primeira-ida-a-igreja',
+      date: '30/11/2025',
+      title: 'Primeira ida à igreja',
+      image: '/historia/05-igreja.png',
+      summary: 'Um momento especial de fé compartilhado lado a lado.',
+      fullText: `Desde o início das conversas, ela logo se mostrou uma verdadeira filha de Deus. Nunca escondeu quem era nem a força de sua fé, algo que ele sempre admirou profundamente nela.
+
+Conforme os encontros foram acontecendo, em determinado momento, ela o convidou para conhecer sua igreja. Ele nem precisou pensar antes de aceitar. Naquele tempo, queria acompanhá-la aonde quer que ela fosse.
+
+Até então, ele sempre havia se sentido muito amado por Deus, embora não frequentasse nenhuma igreja. Deus sempre havia sido bom com ele, mas ele sentia que não correspondia a todo aquele amor.
+
+Assim que chegaram, sentaram-se e o culto começou. Logo nos primeiros momentos, ele ficou surpreso. Tudo era muito diferente daquilo a que estava acostumado. Havia música, energia e animação. As pessoas estavam ali para adorar a Deus e demonstravam verdadeira felicidade por isso.
+
+Era diferente da forma como ele enxergava as igrejas anteriormente, quando tinha a impressão de que as pessoas se forçavam a estar ali e não conseguiam parar de julgar umas às outras.
+
+Naquele lugar, ele se sentiu bem. Sentiu que era exatamente onde deveria estar — não apenas ao lado dela, mas com os dois unidos na presença de Deus.
+
+Naquele dia, ela lhe deu algo que ninguém jamais poderia lhe dar: aproximou-o novamente de Deus e reacendeu sua fé.
+
+Não poderia existir presente maior do que esse.
+
+E foi justamente isso que o fez acreditar ainda mais que havia sido o próprio Deus quem os unira.`
+    },
+    {
+      id: 'ano-novo',
+      date: '31/12/2025',
+      title: 'Ano novo',
+      image: '/historia/06-ano-novo.png',
+      summary: 'A despedida de um ano e o começo de tantos planos a dois.',
+      fullText: `Essa parte da história, na verdade, não se resume a apenas um dia, mas a uma sequência deles.
+
+Eles se conheciam havia menos de dois meses e já passariam a virada do ano juntos. E não apenas isso: começaram a ficar juntos logo depois do Natal e sempre encontravam algum motivo para não se despedir.
+
+Ao todo, passaram cerca de nove dias juntos, do nascer do sol ao nascer do sol.
+
+Parecia um teste. Talvez a maioria das pessoas tivesse medo de passar tanto tempo assim com alguém. Medo de se cansar, de descobrir algum defeito ou de mostrar algum problema.
+
+Mas isso não aconteceu.
+
+Muito pelo contrário.
+
+Cada um daqueles dias foi mágico, tanto nos momentos em que saíram quanto naqueles em que ficaram apenas conversando e passando o tempo juntos em casa.
+
+E tem sido assim desde então.
+
+A verdade é que, desde que ele a conheceu, tudo passou a ser melhor. Tudo era melhor ao lado dela. Ele já não sentia vontade de fazer nada sem sua companhia, pois se sentia mais feliz, mais alegre e mais disposto quando estavam juntos.
+
+Talvez porque ela fosse o amor de sua vida.
+
+Talvez porque, ao lado dela, ele tivesse encontrado seu lar.
+
+Ele amou passar aqueles nove dias com ela.
+
+E amaria passar, ao lado dela, todos os outros dias de sua vida.`
+    },
+    {
+      id: 'apresentacoes',
+      date: '07/01/2026',
+      title: 'Apresentações',
+      image: '/historia/07-apresentacoes.png',
+      summary: 'Quando pessoas importantes também passaram a fazer parte da caminhada.',
+      fullText: `Ele já não se lembrava ao certo de quando tudo aquilo havia acontecido, mas queria registrar dois momentos distintos.
+
+O primeiro foi quando os pais dos dois se conheceram.
+
+Ele confessava ter ficado verdadeiramente nervoso. Nunca havia passado por algo assim e jamais havia apresentado seus pais à família de alguém. Os dois convidaram os pais dela para almoçar na casa dele, e eles aceitaram.
+
+Ambos estavam apreensivos, mas tudo aconteceu de maneira tão boa e natural que parecia que suas famílias haviam nascido para se conhecer, assim como eles.
+
+O encontro se estendeu até o café da tarde, e tudo correu bem. Seu coração finalmente ficou aliviado. Afinal, ele havia esperado a vida inteira para apresentar aos seus pais a família da pessoa certa.
+
+O segundo momento aconteceu quando ele a apresentou à última pessoa que ainda faltava.
+
+Ele a levou até a casa de sua falecida avó — a mulher que mais havia torcido para que encontrasse a pessoa certa, que sempre desejou que ele conhecesse uma mulher exatamente como ela. Por isso, nada lhe pareceu mais justo do que homenagear sua avó mostrando àquela mulher tão especial a casa onde ela havia vivido.
+
+Quando chegaram, ele lhe mostrou toda a propriedade: uma bela casa de madeira, um pouco malcuidada, pois seu avô a visitava com pouca frequência, mas que ainda permanecia uma casa muito especial.
+
+Ele mostrou cada parte daquele lugar e, quando estavam prestes a ir embora, ela o abraçou.
+
+Ele não soube explicar exatamente o motivo, mas começou a chorar.
+
+Lembrou-se de sua avó e deixou as lágrimas caírem. Desde a morte dela, nunca havia conseguido chorar por sua partida. Mas, nos braços dela, aquelas lágrimas vieram acompanhadas de alegria.
+
+Naquele momento, ele sentiu que sua avó também estava feliz por ele finalmente tê-la encontrado.`
+    },
+    {
+      id: 'o-local',
+      date: '22/02/2026',
+      title: 'O local',
+      image: '/historia/08-local.png',
+      summary: 'O cenário escolhido para celebrar o nosso grande dia.',
+      fullText: `Desde que começaram a namorar e o tempo foi avançando, as conversas sobre casamento sempre estiveram presentes. Falavam sobre o que desejavam, faziam perguntas, discutiam o que acreditavam ser necessário e imaginavam uma infinidade de detalhes.
+
+Até que, em algum momento, no final de janeiro, as ideias e as conversas deixaram de ser apenas possibilidades e começaram a se transformar em planos.
+
+E, naturalmente, uma das decisões mais importantes seria escolher o lugar onde realizariam o casamento.
+
+Ela pesquisou alguns locais, e ele também. Em uma de suas viagens, ela conheceu um lugar lindo e lhe enviou vários vídeos e fotos com ideias:
+
+“Olha, amor, podemos colocar as cadeiras aqui, ficar em pé ali e colocar o tapete assim e assim.”
+
+Eles pesquisaram, conversaram e visitaram possibilidades. Já haviam decidido que se casariam em outubro de 2027 e começariam a guardar suas economias para tornar esse sonho possível. Faltava apenas encontrar o lugar certo.
+
+Então, no dia 14 de fevereiro, enquanto seguiam para a casa dele, ele se lembrou de um local que ficava bem perto dali e que sempre considerou um dos lugares mais bonitos que conhecia.
+
+Não perderam tempo. Passaram direto pela casa e seguiram até lá.
+
+Assim que desceu do carro e olhou o espaço por entre as grades, ela disse:
+
+“É aqui. Vai ser aqui.”
+
+Naquele momento, ele também teve certeza de que haviam encontrado o lugar certo.
+
+Ele conseguiu o contato da proprietária e, na semana seguinte, os dois combinaram uma visita. Até então, a intenção era apenas conhecer o espaço por completo e descobrir se haveria alguma data disponível para outubro de 2027.
+
+Eles foram extremamente bem recebidos. A proprietária mostrou todo o local, incluindo as áreas abertas e fechadas. Depois, fez a pergunta:
+
+“Para qual data vocês querem?”
+
+Os dois responderam apenas que desejavam se casar em outubro.
+
+Foi então que ela os surpreendeu:
+
+“Temos uma data disponível para 31 de outubro deste ano.”
+
+Naquele instante, os dois se olharam e pediram um tempo para pensar.
+
+Mas a verdade é que, quando seus olhares se encontraram, ambos já sabiam qual seria a resposta. Precisavam apenas de alguns minutos para compreender tudo o que aquela decisão significava.
+
+Quando voltaram a conversar com a proprietária, não restava qualquer dúvida.
+
+O casamento estava marcado para o dia 31 de outubro de 2026.
+
+Tudo isso antes mesmo de o pedido de casamento acontecer.`
+    },
+    {
+      id: 'o-pedido',
+      date: '28/02/2026',
+      title: 'O pedido',
+      image: '/historia/09-pedido-casamento.png',
+      summary: 'A pergunta que transformou sonhos em um futuro compartilhado.',
+      fullText: `Quando as conversas sobre o casamento começaram a se transformar em planos, ele logo passou a pensar em pedi-la em casamento.
+
+Foi então que, uma semana antes da visita ao local da cerimônia, ele comprou a aliança de noivado. Simplesmente começou a pesquisar e, assim que colocou os olhos naquela, soube que era perfeita. Parecia ter sido feita especialmente para ficar em seu dedo.
+
+Antes mesmo de visitarem o lugar, ele já havia contado a toda a sua família que faria o pedido. Naquele momento, porém, o casamento ainda estava planejado para acontecer apenas em 2027.
+
+A verdade é que, pouco antes de pedi-la em casamento, ele já sentia que a palavra “namorada” não era mais suficiente. Ela não representava verdadeiramente a forma como ele a enxergava. Depois de encomendar a aliança, sua ansiedade apenas aumentou. Ele mal podia esperar para fazer o pedido e, finalmente, poder chamá-la de noiva.
+
+Ele planejou aquele momento de diferentes formas.
+
+O plano A era levá-la até um morro e ler um pequeno texto que havia escrito para ela.
+
+O plano B era levá-la ao lugar onde haviam tido o primeiro encontro.
+
+O plano C era retornar ao lugar onde ele havia se apaixonado por ela.
+
+Todos os planos falharam.
+
+Choveu, e eles não poderiam subir o morro. Ir ao local do primeiro encontro seria repentino demais, e ela provavelmente entenderia tudo assim que chegassem. Quando ele a convidou para voltar ao lugar do segundo encontro, ela não demonstrou muita vontade de ir.
+
+Então, ele simplesmente se ajoelhou diante dela e fez o pedido.
+
+Ele queria ter preparado algo grandioso, mas já não aguentava mais não poder chamá-la de sua noiva.
+
+Ela recebeu o pedido com tanta alegria que ele conseguiu ver, em seus olhos, uma verdade muito simples: o lugar não importava.
+
+Ela teria dito “sim” com a mesma felicidade com que havia aceitado sair com ele pela primeira vez.`
+    },
+    {
+      id: 'o-casamento',
+      date: '31/10/2026',
+      title: 'O casamento',
+      image: '/historia/10-casamento.png',
+      summary: 'O dia em que, diante de Deus e de quem amamos, diremos sim para sempre.',
+      fullText: `Ainda faltam alguns meses para que o casamento finalmente aconteça, mas esta pequena recapitulação existe para mostrar que tudo acontece no tempo certo.
+
+O pedido de namoro veio em menos de um mês. O pedido de casamento, em menos de três. E, antes mesmo de completarem um ano desde o dia em que se conheceram, eles já estarão casados.
+
+No dia 1º de novembro de 2025, faltava apenas um dia para que ele a conhecesse.
+
+No dia 1º de novembro de 2026, ele viverá seu primeiro dia casado com ela.
+
+Ele a ama infinitamente.
+
+Seu amor.
+
+Sua futura esposa.
+
+Phamyla.`
+    },
+    {
+      id: 'quadro-em-branco',
+      date: 'Daqui em diante',
+      title: 'Um quadro em branco',
+      image: '/historia/quadro-em-branco.png',
+      summary: 'Essa é apenas uma pequena parte da nossa história. Somos um quadro em branco, pronto para ser preenchido ao longo das nossas vidas juntos.',
+      fullText: ''
+    }
+  ];
+
+  /*
+    Posição dos dez pontos sobre mapa-geral.webp (percentuais).
+    Se a arte final tiver os quadros em outras posições, ajuste somente x e y abaixo.
+  */
+const STORY_POINTS = [
+  { x: 12.5, y: 13.3 }, // Primeiro encontro — ponte
+  { x: 47.1, y: 16.1 }, // Segundo encontro — lago
+  { x: 83.5, y: 16.2 }, // Terceiro encontro — selfie
+  { x: 12.5, y: 38.6 }, // Pedido de namoro — alianças
+  { x: 14.3, y: 66.9 }, // Primeira ida à igreja
+  { x: 49.5, y: 82.2 }, // Ano novo — praia
+  { x: 83.1, y: 86.3 }, // Apresentações — casa
+  { x: 83.3, y: 65.1 }, // O local
+  { x: 83.6, y: 39.3 }, // O pedido
+  { x: 50.1, y: 47.5 }  // O casamento — coração
+];
   const setVH = () => {
     root.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
   };
@@ -2016,36 +3164,234 @@ footer {
     revealEls.forEach(el => revealObserver.observe(el));
   }
 
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightboxImg');
-  const lightboxClose = document.getElementById('lightboxClose');
+  const STORY_MAP_COUNT = STORY_POINTS.length;
+  const storyHotspots = document.getElementById('storyHotspots');
+  const storyPathActive = document.getElementById('storyPathActive');
+  const storyMapProgress = document.getElementById('storyMapProgress');
+  const storyStart = document.getElementById('storyStart');
+  const storyModal = document.getElementById('storyModal');
+  const storyPanel = document.getElementById('storyPanel');
+  const storyClose = document.getElementById('storyClose');
+  const storyDate = document.getElementById('storyDate');
+  const storyImage = document.getElementById('storyImage');
+  const storyIndicator = document.getElementById('storyIndicator');
+  const storyTitle = document.getElementById('storyTitle');
+  const storySummary = document.getElementById('storySummary');
+  const storyReadMore = document.getElementById('storyReadMore');
+  const storyFullText = document.getElementById('storyFullText');
+  const storyPrevious = document.getElementById('storyPrevious');
+  const storyNext = document.getElementById('storyNext');
+  const storyReturn = document.getElementById('storyReturn');
+  const storyReplay = document.getElementById('storyReplay');
 
-  function closeLightbox() {
-    if (!lightbox || !lightboxImg) return;
-    lightbox.classList.remove('active');
-    document.body.style.overflow = '';
-    lightboxImg.src = '';
-    lightboxImg.alt = '';
+  let currentStoryIndex = 0;
+  let furthestStoryIndex = -1;
+  let storyReturnFocus = null;
+  let storyCloseTimer = null;
+  let bodyOverflowBeforeStory = '';
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  if (storyHotspots) {
+    STORY_POINTS.forEach((point, index) => {
+      const step = STORY_STEPS[index];
+      const button = document.createElement('button');
+      const label = document.createElement('span');
+
+      button.type = 'button';
+      button.className = 'story-hotspot';
+      button.dataset.storyIndex = String(index);
+      button.style.setProperty('--x', `${point.x}%`);
+      button.style.setProperty('--y', `${point.y}%`);
+      button.setAttribute('aria-label', `Abrir capítulo ${index + 1}: ${step.title}, ${step.date}`);
+      button.title = `${step.title} — ${step.date}`;
+
+      label.className = 'story-hotspot-label';
+      label.setAttribute('aria-hidden', 'true');
+      label.textContent = `${index + 1}. ${step.title}`;
+      button.appendChild(label);
+
+      button.addEventListener('click', () => openStory(index, button));
+      storyHotspots.appendChild(button);
+    });
   }
 
-  document.querySelectorAll('.gallery-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const img = item.querySelector('img');
-      if (!img) return;
-      if (!lightbox || !lightboxImg) return;
-      lightboxImg.src = img.currentSrc || img.src;
-      lightboxImg.alt = img.alt || 'Foto ampliada';
-      lightbox.classList.add('active');
+  function storyHotspotButtons() {
+    return storyHotspots ? Array.from(storyHotspots.querySelectorAll('.story-hotspot')) : [];
+  }
+
+  function updateStoryMap() {
+    const visitedCount = Math.min(Math.max(furthestStoryIndex + 1, 0), STORY_MAP_COUNT);
+
+    storyHotspotButtons().forEach((button, index) => {
+      const isVisited = index <= furthestStoryIndex;
+      const isCurrent = index === currentStoryIndex && Boolean(storyModal?.classList.contains('is-open'));
+      button.classList.toggle('is-visited', isVisited);
+      button.classList.toggle('is-current', isCurrent);
+
+      if (isCurrent) {
+        button.setAttribute('aria-current', 'step');
+      } else {
+        button.removeAttribute('aria-current');
+      }
+    });
+
+    if (storyPathActive && typeof storyPathActive.getTotalLength === 'function') {
+      const pathLength = storyPathActive.getTotalLength();
+      const progress = visitedCount / STORY_MAP_COUNT;
+      storyPathActive.style.strokeDasharray = `${pathLength} ${pathLength}`;
+      storyPathActive.style.strokeDashoffset = String(pathLength * (1 - progress));
+    }
+
+    if (storyMapProgress) {
+      storyMapProgress.textContent = visitedCount
+        ? `${visitedCount} de ${STORY_MAP_COUNT} capítulos percorridos`
+        : 'Escolha um quadro para começar';
+    }
+  }
+
+  function renderStory(index) {
+    const safeIndex = Math.min(Math.max(index, 0), STORY_STEPS.length - 1);
+    const step = STORY_STEPS[safeIndex];
+    const isFinal = safeIndex === STORY_STEPS.length - 1;
+
+    currentStoryIndex = safeIndex;
+    furthestStoryIndex = Math.max(furthestStoryIndex, safeIndex);
+
+    if (storyDate) storyDate.textContent = step.date;
+    if (storyImage) {
+      storyImage.src = step.image;
+      storyImage.alt = isFinal
+        ? 'Moldura dourada vazia, símbolo dos próximos capítulos da história do casal'
+        : `Fotografia do capítulo ${step.title}, em ${step.date}`;
+    }
+    if (storyIndicator) {
+      storyIndicator.textContent = isFinal ? 'Encerramento' : `${safeIndex + 1} de ${STORY_MAP_COUNT}`;
+    }
+    if (storyTitle) storyTitle.textContent = step.title;
+    if (storySummary) storySummary.textContent = step.summary;
+    if (storyFullText) {
+      storyFullText.textContent = step.fullText;
+      storyFullText.hidden = true;
+    }
+    if (storyReadMore) {
+      storyReadMore.hidden = isFinal || !step.fullText;
+      storyReadMore.setAttribute('aria-expanded', 'false');
+      storyReadMore.textContent = 'Ler história completa';
+    }
+    if (storyPrevious) storyPrevious.disabled = safeIndex === 0;
+    if (storyPanel) {
+      storyPanel.classList.toggle('is-final', isFinal);
+      storyPanel.classList.remove('is-entering');
+      void storyPanel.offsetWidth;
+      storyPanel.classList.add('is-entering');
+    }
+    if (storyModal) storyModal.scrollTop = 0;
+
+    updateStoryMap();
+  }
+
+  function openStory(index, trigger) {
+    if (!storyModal) return;
+
+    if (storyCloseTimer) {
+      window.clearTimeout(storyCloseTimer);
+      storyCloseTimer = null;
+    }
+
+    if (storyModal.hidden || !storyModal.classList.contains('is-open')) {
+      storyReturnFocus = trigger || document.activeElement;
+      bodyOverflowBeforeStory = document.body.style.overflow;
+      document.body.classList.add('story-open');
       document.body.style.overflow = 'hidden';
-    });
-  });
+      storyModal.hidden = false;
+      window.requestAnimationFrame(() => {
+        storyModal.classList.add('is-open');
+        updateStoryMap();
+      });
+    }
 
-  if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
-  if (lightbox) {
-    lightbox.addEventListener('click', event => {
-      if (event.target === lightbox) closeLightbox();
+    renderStory(index);
+    window.setTimeout(() => storyClose?.focus(), reduceMotion ? 0 : 120);
+  }
+
+  function closeStory(restoreFocus = true) {
+    if (!storyModal || storyModal.hidden) return;
+
+    storyModal.classList.remove('is-open');
+    document.body.classList.remove('story-open');
+    document.body.style.overflow = bodyOverflowBeforeStory;
+    updateStoryMap();
+
+    const finishClose = () => {
+      storyModal.hidden = true;
+      storyCloseTimer = null;
+      if (restoreFocus && storyReturnFocus instanceof HTMLElement) storyReturnFocus.focus();
+    };
+
+    if (reduceMotion) {
+      finishClose();
+    } else {
+      storyCloseTimer = window.setTimeout(finishClose, 300);
+    }
+  }
+
+  function showPreviousStory() {
+    if (currentStoryIndex > 0) renderStory(currentStoryIndex - 1);
+  }
+
+  function showNextStory() {
+    if (currentStoryIndex < STORY_STEPS.length - 1) renderStory(currentStoryIndex + 1);
+  }
+
+  if (storyStart) storyStart.addEventListener('click', () => openStory(0, storyStart));
+  if (storyClose) storyClose.addEventListener('click', () => closeStory());
+  if (storyPrevious) storyPrevious.addEventListener('click', showPreviousStory);
+  if (storyNext) storyNext.addEventListener('click', showNextStory);
+  if (storyReturn) storyReturn.addEventListener('click', () => closeStory());
+
+  if (storyReplay) {
+    storyReplay.addEventListener('click', () => {
+      furthestStoryIndex = -1;
+      updateStoryMap();
+      window.requestAnimationFrame(() => renderStory(0));
     });
   }
+
+  if (storyReadMore && storyFullText) {
+    storyReadMore.addEventListener('click', () => {
+      const willExpand = storyReadMore.getAttribute('aria-expanded') !== 'true';
+      storyReadMore.setAttribute('aria-expanded', String(willExpand));
+      storyReadMore.textContent = willExpand ? 'Recolher história' : 'Ler história completa';
+      storyFullText.hidden = !willExpand;
+    });
+  }
+
+  if (storyModal) {
+    storyModal.addEventListener('click', event => {
+      if (event.target === storyModal) closeStory();
+    });
+  }
+
+  if (storyPanel) {
+    storyPanel.addEventListener('touchstart', event => {
+      const touch = event.changedTouches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+    }, { passive: true });
+
+    storyPanel.addEventListener('touchend', event => {
+      const touch = event.changedTouches[0];
+      const deltaX = touch.clientX - touchStartX;
+      const deltaY = touch.clientY - touchStartY;
+
+      if (Math.abs(deltaX) < 54 || Math.abs(deltaX) <= Math.abs(deltaY) * 1.2) return;
+      if (deltaX < 0) showNextStory();
+      if (deltaX > 0) showPreviousStory();
+    }, { passive: true });
+  }
+
+  updateStoryMap();
 
   const navEl = document.getElementById('nav');
   const navToggle = document.getElementById('navToggle');
@@ -2085,8 +3431,46 @@ footer {
   }
 
   document.addEventListener('keydown', event => {
+    const storyIsOpen = Boolean(storyModal && !storyModal.hidden);
+
+    if (storyIsOpen) {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeStory();
+        return;
+      }
+
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        showPreviousStory();
+        return;
+      }
+
+      if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        showNextStory();
+        return;
+      }
+
+      if (event.key === 'Tab') {
+        const focusable = Array.from(storyModal.querySelectorAll('button:not([disabled]):not([hidden])'))
+          .filter(element => element.offsetParent !== null);
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (first && last && event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (first && last && !event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+
+      return;
+    }
+
     if (event.key === 'Escape') {
-      closeLightbox();
       closeMobileNav();
     }
   });
@@ -2098,6 +3482,31 @@ footer {
     // Para abrir em nova aba, descomente as duas linhas abaixo:
     // presentesLink.target = '_blank';
     // presentesLink.rel = 'noopener noreferrer';
+  }
+
+  const presentesHavanLink = document.getElementById('presentesHavanLink');
+
+  if (presentesHavanLink) {
+    const havanUrlConfigurada = Boolean(
+      HAVAN_PRESENTES_URL && !HAVAN_PRESENTES_URL.includes('COLE_AQUI')
+    );
+
+    if (havanUrlConfigurada) {
+      presentesHavanLink.href = HAVAN_PRESENTES_URL;
+      presentesHavanLink.target = '_blank';
+      presentesHavanLink.rel = 'noopener noreferrer';
+      presentesHavanLink.removeAttribute('aria-disabled');
+      presentesHavanLink.removeAttribute('tabindex');
+      presentesHavanLink.textContent = 'Abrir lista Havan';
+    } else {
+      presentesHavanLink.removeAttribute('href');
+      presentesHavanLink.removeAttribute('target');
+      presentesHavanLink.removeAttribute('rel');
+      presentesHavanLink.setAttribute('aria-disabled', 'true');
+      presentesHavanLink.setAttribute('tabindex', '0');
+      presentesHavanLink.textContent = 'Lista Havan em breve';
+      presentesHavanLink.addEventListener('click', event => event.preventDefault());
+    }
   }
 
   const rsvpForm = document.getElementById('rsvpForm');
